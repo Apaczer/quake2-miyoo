@@ -6,15 +6,18 @@
 CC = gcc
 CXX = g++
 
-OUTPUTNAME = quake2.elf
+SDL_CFLAGS  := $(shell sdl-config --cflags)
+SDL_LIBS    := $(shell sdl-config --libs)
+
+OUTPUTNAME = quake2
 
 DEFINES = -DSDL -DYQ2OSTYPE=\"Linux\" -DYQ2ARCH=\"x86_64\"
 INCLUDES = -I. -Isrc
 
-OPT_FLAGS  = -O0 -g3 -m32
+OPT_FLAGS  = -O0 -g3
 
-CFLAGS = $(DEFINES) $(INCLUDES) $(OPT_FLAGS) -std=gnu99
-LDFLAGS = -lSDL -lm 
+CFLAGS = $(DEFINES) $(INCLUDES) $(SDL_CFLAGS) $(OPT_FLAGS) -std=gnu99
+LDFLAGS = $(SDL_LIBS) -lm
 
 OBJS =  \
 	src/common/shared/flash.o \
