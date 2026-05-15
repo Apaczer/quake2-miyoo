@@ -2,24 +2,24 @@
 # Makefile for Linux
 # It's mostly for conveniance and also so i don't have to recompile SDL2 each time.
 #
-CHAINPREFIX=/opt/bittboy-toolchain
-CROSS_COMPILE=$(CHAINPREFIX)/usr/bin/arm-miyoo-linux-musleabi-
+CHAINPREFIX ?= /opt/miyoo
+CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
 CC = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
 STRIP = $(CROSS_COMPILE)strip
-SYSROOT     := $(CHAINPREFIX)/usr/arm-miyoo-linux-musleabi/sysroot
+SYSROOT ?= $(shell$(CC) --print-sysroot)
 SDL_CFLAGS  := $(shell $(SYSROOT)/usr/bin/sdl-config --cflags)
-SDL_LIBS    := $(shell $(SYSROOT)/usr/bin/sdl-config --libs)
+LIBS   = $(shell $(SYSROOT)/../../usr/bin/pkg-config --libs sdl asound)
 
-OUTPUTNAME = quakers97.butt
+OUTPUTNAME = quake2
 
 DEFINES = -DSDL -DYQ2OSTYPE=\"Linux\" -DYQ2ARCH=\"arm\" -Iinclude
 INCLUDES = -I. -Isrc
 
 OPT_FLAGS  = -Ofast -fdata-sections -ffunction-sections
 
-CFLAGS = $(DEFINES) $(INCLUDES) $(OPT_FLAGS) -std=gnu99 -fno-PIC
-LDFLAGS = -lSDL -lasound -lm -Wl,--as-needed -Wl,--gc-sections -s -flto -no-pie
+CFLAGS = $(DEFINES) $(INCLUDES) $(SDL_CFLAGS) $(OPT_FLAGS) -std=gnu99 -fno-PIC
+LDFLAGS = $(LIBS) -lm -Wl,--as-needed -Wl,--gc-sections -s -flto -no-pie
 
 OBJS =  \
 	src/common/shared/flash.o \
