@@ -4,8 +4,16 @@ The Yamagi Quake II Client is an enhanced version of id Software's Quake II with
 
 ### Build steps:
 
+- native (Linux)  
+`make -j$(nproc)`
+
 - cross-compile (MiyooCFW)  
 `make -j$(nproc) -f Makefile.miyoo`
 
-- native (Linux)  
-`make -j$(nproc)`
+### Requirements
+
+- native
+`./baseq2` with necessary pak assets in $CWD of target binary (you can change path with `-datadir` arg cmd)
+
+- MiyooCFW
+place `baseq2` assets directory in `/roms/QUAKE_II` dir
