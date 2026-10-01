@@ -32,7 +32,7 @@ ifeq ($(LTO),1)
 	EXTRA_LDFLAGS += -flto
 endif
 
-DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\"
+DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\" -DOGG
 
 CC = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
