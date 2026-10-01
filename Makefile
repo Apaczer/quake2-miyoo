@@ -14,6 +14,7 @@ ifeq ($(platform), )
   OPT_CFLAGS += -Ofast
   EXTRA_LIBS = -lm
 else ifeq ($(platform), miyoo)
+  LTO ?= 1
   INSTALLDIR ?= /mnt
   CHAINPREFIX  ?= /opt/miyoo
   CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
@@ -21,9 +22,14 @@ else ifeq ($(platform), miyoo)
   DEFINES = -DYQ2ARCH=\"arm\"
 
   DEBUG_CFLAGS += -g0
-  OPT_CFLAGS += -flto -Ofast -fdata-sections -ffunction-sections -fsingle-precision-constant \
+  OPT_CFLAGS += -Ofast -fdata-sections -ffunction-sections -fsingle-precision-constant \
 				  -fno-PIC
   EXTRA_LDFLAGS = -no-pie -s -Wl,--as-needed -Wl,--gc-sections
+endif
+
+ifeq ($(LTO),1)
+	OPT_CFLAGS += -flto
+	EXTRA_LDFLAGS += -flto
 endif
 
 DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\"
