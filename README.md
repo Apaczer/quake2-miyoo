@@ -2,15 +2,120 @@
 
 Based on Yamagi Quake II. This port uses SDL 1.2 and has no shared libraries or whatever,
 making it easier to port to platforms that don't support dynamic libraries or have trouble
-with them. (mainly still in development OSes such as HaikuOS and maybe SyllableOS)
+with them.
 
-For now, it is targetting the RS-97 and eventually the TI-Nspire (CX).
-It works on neither (although the RS-97 build works on the GCW-Zero but not on the RS-97 for some odd reasons probably related to the C library...).
-It needs more modifications for the TI-Nspire and even more striping.
+For now, it is targetting native x86_64 Linux and ARMv5 Miyoo
 
+The Yamagi Quake II Client is an enhanced version of id Software's Quake II with focus on offline and coop gameplay. This code is build upon Icculus Quake II, which itself is based on Quake II 3.21
 
+### Build steps:
+
+- native (Linux)  
+`make -j$(nproc)`
+
+- cross-compile (MiyooCFW)  
+`make -j$(nproc) platform=miyoo`
+
+### Requirements
+
+- native
+`./baseq2` with necessary pak assets in $CWD of target binary (you can change path with `-datadir` arg cmd e.g: `./quake2 -datadir /home/QUAKE_II` pointing to "baseq2" subdir inside)
+
+- MiyooCFW
+place `baseq2` assets directory in `/roms/QUAKE_II` dir
+
+   <details>
+   <summary>e.g data ./baseq2 content</summary>
+
+   ```tree
+   baseq2
+   ├── music
+   │   ├── 02.ogg
+   │   ├── 03.ogg
+   │   ├── 04.ogg
+   │   ├── 05.ogg
+   │   ├── 06.ogg
+   │   ├── 07.ogg
+   │   ├── 08.ogg
+   │   ├── 09.ogg
+   │   ├── 10.ogg
+   │   ├── 11.ogg
+   │   ├── 12.ogg
+   │   ├── 13.ogg
+   │   ├── 14.ogg
+   │   ├── 15.ogg
+   │   ├── 16.ogg
+   │   ├── 17.ogg
+   │   ├── 18.ogg
+   │   ├── 19.ogg
+   │   ├── 20.ogg
+   │   └── 21.ogg
+   ├── pak0.pak
+   └── players
+      ├── female
+      │   ├── athena.pcx
+      │   ├── athena_i.pcx
+      │   ├── brianna.pcx
+      │   ├── brianna_i.pcx
+      │   ├── cobalt.pcx
+      │   ├── cobalt_i.pcx
+      │   ├── doomgal.pcx
+      │   ├── doomgal_i.pcx
+      │   ├── ensign.pcx
+      │   ├── ensign_i.pcx
+      │   ├── jezebel.pcx
+      │   ├── jezebel_i.pcx
+      │   ├── jungle.pcx
+      │   ├── jungle_i.pcx
+      │   ├── lotus.pcx
+      │   ├── lotus_i.pcx
+      │   ├── stiletto.pcx
+      │   ├── stiletto_i.pcx
+      │   ├── tris.md2
+      │   ├── venus.pcx
+      │   ├── venus_i.pcx
+      │   ├── voodoo.pcx
+      │   ├── voodoo_i.pcx
+      │   ├── weapon.md2
+      │   └── weapon.pcx
+      └── male
+         ├── cipher.pcx
+         ├── cipher_i.pcx
+         ├── claymore.pcx
+         ├── claymore_i.pcx
+         ├── flak.pcx
+         ├── flak_i.pcx
+         ├── grunt.pcx
+         ├── grunt_i.pcx
+         ├── howitzer.pcx
+         ├── howitzer_i.pcx
+         ├── major.pcx
+         ├── major_i.pcx
+         ├── nightops.pcx
+         ├── nightops_i.pcx
+         ├── pointman.pcx
+         ├── pointman_i.pcx
+         ├── psycho.pcx
+         ├── psycho_i.pcx
+         ├── rampage.pcx
+         ├── rampage_i.pcx
+         ├── razor.pcx
+         ├── razor_i.pcx
+         ├── recon.pcx
+         ├── recon_i.pcx
+         ├── scout.pcx
+         ├── scout_i.pcx
+         ├── skin.pcx
+         ├── sniper.pcx
+         ├── sniper_i.pcx
+         ├── tris.md2
+         ├── viper.pcx
+         ├── viper_i.pcx
+         ├── weapon.md2
+         └── weapon.pcx
+   ```
+   </details>
 ==================
-
 
 # Yamagi Quake II
 
