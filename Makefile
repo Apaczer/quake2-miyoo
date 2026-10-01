@@ -3,21 +3,43 @@
 # It's mostly for conveniance and also so i don't have to recompile SDL2 each time.
 #
 
-CC = gcc
-CXX = g++
-
-SDL_CFLAGS  := $(shell sdl-config --cflags)
-SDL_LIBS    := $(shell sdl-config --libs)
-
 OUTPUTNAME = quake2
 
-DEFINES = -DSDL -DYQ2OSTYPE=\"Linux\" -DYQ2ARCH=\"x86_64\"
+ifeq ($(platform), )
+  INSTALLDIR ?= ./
+
+  DEFINES = -DYQ2ARCH=\"x86_64\"
+
+  DEBUG_CFLAGS += -g3
+  OPT_CFLAGS += -Ofast
+  EXTRA_LIBS = -lm
+else ifeq ($(platform), miyoo)
+  INSTALLDIR ?= /mnt
+  CHAINPREFIX  ?= /opt/miyoo
+  CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
+
+  DEFINES = -DYQ2ARCH=\"arm\"
+
+  DEBUG_CFLAGS += -g0
+  OPT_CFLAGS += -flto -Ofast -fdata-sections -ffunction-sections -fsingle-precision-constant \
+				  -fno-PIC
+  EXTRA_LDFLAGS = -no-pie -s -Wl,--as-needed -Wl,--gc-sections
+endif
+
+DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\"
+
+CC = $(CROSS_COMPILE)gcc
+CXX = $(CROSS_COMPILE)g++
+STRIP = $(CROSS_COMPILE)strip
+SYSROOT ?= $(shell$(CC) --print-sysroot)
+SDL_CFLAGS  := $(shell $(SYSROOT)/usr/bin/sdl-config --cflags)
+SDL_LIBS   = $(shell $(SYSROOT)/usr/bin/sdl-config --libs)
+
 INCLUDES = -I. -Isrc
+LIBS = $(SDL_LIBS) $(EXTRA_LIBS)
 
-OPT_FLAGS  = -O0 -g3
-
-CFLAGS = $(DEFINES) $(INCLUDES) $(SDL_CFLAGS) $(OPT_FLAGS) -std=gnu99
-LDFLAGS = $(SDL_LIBS) -lm
+CFLAGS = $(DEFINES) $(INCLUDES) $(SDL_CFLAGS) $(DEBUG_CFLAGS) $(OPT_CFLAGS) -std=gnu99
+LDFLAGS = $(EXTRA_LDFLAGS)
 
 OBJS =  \
 	src/common/shared/flash.o \
@@ -161,7 +183,7 @@ OBJS += src/client/refresh/soft/sw_main.o \
 all: executable
 
 executable : $(OBJS)
-	$(CC) -o $(OUTPUTNAME) $(OBJS) $(CFLAGS) $(LDFLAGS)
+	$(CC) $(OBJS) $(LIBS) -o $(OUTPUTNAME) $(LDFLAGS)
 
 clean:
 	rm $(OBJS) $(OUTPUTNAME)
