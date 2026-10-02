@@ -1166,7 +1166,7 @@ ControlsSetMenuItemValues(void)
     }
 #endif
 
-    s_options_quality_list.curvalue = (Cvar_VariableValue("s_loadas8bit") == 0);
+    s_options_quality_list.curvalue = (s_khz->value == 11 || s_khz->value == 22 ? 0 : 1);
 
     s_options_sensitivity_slider.curvalue = sensitivity->value * 2;
 
