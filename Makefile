@@ -11,7 +11,7 @@ ifeq ($(platform), )
   DEFINES = -DYQ2ARCH=\"x86_64\"
 
   DEBUG_CFLAGS += -g3
-  OPT_CFLAGS += -Ofast
+  OPT_CFLAGS += -O0
   EXTRA_LIBS = -lm
 else ifeq ($(platform), miyoo)
   LTO ?= 1
