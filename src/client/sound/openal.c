@@ -38,6 +38,9 @@
 #include "../../backends/generic/header/qal.h"
 #include "header/local.h"
 #include "header/vorbis.h"
+#ifdef MP3
+#include "header/mp3.h"
+#endif
 
 /* translates from AL coordinate system to quake */
 #define AL_UnpackVector(v) - v[1], v[2], -v[0]
@@ -683,6 +686,10 @@ AL_Update(void)
 	/* add music */
 #ifdef OGG
 	OGG_Stream();
+#endif
+
+#ifdef MP3
+	MP3_Stream();
 #endif
 
 	AL_StreamUpdate();

@@ -1092,6 +1092,10 @@ CL_ParseConfigString(void)
 
 			OGG_PlayTrack(track);
 #endif
+
+#ifdef MP3
+			MP3_PlayTrack(track);
+#endif
 		}
 	}
 	else if ((i >= CS_MODELS) && (i < CS_MODELS + MAX_MODELS))

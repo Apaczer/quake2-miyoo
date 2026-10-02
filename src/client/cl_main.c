@@ -910,6 +910,9 @@ CL_Shutdown(void)
 #ifdef OGG
 	OGG_Stop();
 #endif
+#ifdef MP3
+	MP3_Stop();
+#endif
 	S_Shutdown();
 	IN_Shutdown();
 	VID_Shutdown();

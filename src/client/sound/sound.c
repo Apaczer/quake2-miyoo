@@ -32,6 +32,9 @@
 #include "../../backends/generic/header/qal.h"
 #include "header/local.h"
 #include "header/vorbis.h"
+#ifdef MP3
+#include "header/mp3.h"
+#endif
 
 /* During registration it is possible to have more sounds
    than could actually be referenced during gameplay,
@@ -1088,6 +1091,10 @@ S_Init(void)
 	OGG_Init();
 #endif
 
+#ifdef MP3
+	MP3_Init();
+#endif
+
 	Com_Printf("Sound sampling rate: %i\n", sound.speed);
 	S_StopAllSounds();
 
@@ -1113,6 +1120,10 @@ S_Shutdown(void)
 
 #ifdef OGG
 	OGG_Shutdown();
+#endif
+
+#ifdef MP3
+	MP3_Shutdown();
 #endif
 
 	/* free all sounds */

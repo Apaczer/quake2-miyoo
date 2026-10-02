@@ -30,6 +30,9 @@
 #include "unzip/unzip.h"
 
 #include "../client/sound/header/vorbis.h"
+#ifdef MP3
+#include "../client/sound/header/mp3.h"
+#endif
 
 
 #define MAX_HANDLES 512
@@ -1650,7 +1653,12 @@ FS_BuildGameSpecificSearchPath(char *dir)
 	// the player wants to switch to another mod. In that case the
 	// list of music tracks needs to be loaded again (=> tracks
 	// are possibly from the new mod dir)
+#ifdef OGG
 	OGG_InitTrackList();
+#endif
+#ifdef MP3
+	MP3_InitTrackList();
+#endif
 #endif
 }
 
@@ -1746,8 +1754,13 @@ FS_InitFilesystem(void)
 #ifndef DEDICATED_ONLY
 	else
 	{
-		// no mod, but we still need to get the list of OGG tracks for background music
+		// no mod, but we still need to get the list of music tracks for background music
+#ifdef OGG
 		OGG_InitTrackList();
+#endif
+#ifdef MP3
+		MP3_InitTrackList();
+#endif
 	}
 #endif
 

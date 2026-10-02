@@ -323,6 +323,9 @@ CL_Disconnect(void)
 #ifdef OGG
 	OGG_Stop();
 #endif
+#ifdef MP3
+	MP3_Stop();
+#endif
 #ifdef CDA
 	CDAudio_Stop();
 #endif

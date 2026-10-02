@@ -117,6 +117,11 @@ Qcommon_Buildstring(void)
 #else
 	printf(" - OGG/Vorbis\n");
 #endif
+#ifdef MP3
+	printf(" + MP3 (libmpg123)\n");
+#else
+	printf(" - MP3 (libmpg123)\n");
+#endif
 #ifdef USE_OPENAL
 	printf(" + OpenAL audio\n");
 #else

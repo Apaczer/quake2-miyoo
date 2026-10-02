@@ -37,7 +37,11 @@ typedef struct
 
 /* An ugly hack to rewrite CVARs loaded from config.cfg */
 replacement_t replacements[] = {
+#if defined(MP3) && !defined(OGG)
+	{"cd_shuffle", "mp3_shuffle"},
+#else
 	{"cd_shuffle", "ogg_shuffle"},
+#endif
 	{"cl_drawfps", "cl_showfps"},
 	{"gl_drawentities", "r_drawentities"},
 	{"gl_drawworld", "r_drawworld"},

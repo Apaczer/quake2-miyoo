@@ -27,6 +27,8 @@
  * =======================================================================
  */
 
+#ifdef OGG
+
 #ifndef _WIN32
 #include <sys/time.h>
 #endif
@@ -691,3 +693,5 @@ OGG_Shutdown(void)
 
 	ogg_started = false;
 }
+
+#endif /* OGG */

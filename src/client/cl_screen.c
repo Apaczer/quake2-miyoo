@@ -573,6 +573,9 @@ SCR_BeginLoadingPlaque(void)
 #ifdef OGG
 	OGG_Stop();
 #endif
+#ifdef MP3
+	MP3_Stop();
+#endif
 
 	if (cls.disable_screen)
 	{

@@ -43,6 +43,12 @@
 /* Local includes */
 #include "../../client/header/client.h"
 #include "../../client/sound/header/local.h"
+#ifdef OGG
+#include "../../client/sound/header/vorbis.h"
+#endif
+#ifdef MP3
+#include "../../client/sound/header/mp3.h"
+#endif
 
 /* Defines */
 #define SDL_PAINTBUFFER_SIZE 2048
@@ -1187,6 +1193,11 @@ SDL_Update(void)
 #ifdef OGG
 	/* stream music */
 	OGG_Stream();
+#endif
+
+#ifdef MP3
+	/* stream mp3 music */
+	MP3_Stream();
 #endif
 
 	if (!sound.buffer)

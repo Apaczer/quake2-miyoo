@@ -1055,12 +1055,16 @@ static menuslider_s s_options_sfxvolume_slider;
 #ifdef SDL2
 static menuslider_s s_options_haptic_slider;
 #endif
-#if defined(OGG) || defined(CDA)
+#if defined(OGG) || defined(MP3) || defined(CDA)
 static menulist_s s_options_cdshuffle_box;
 #endif
 #ifdef OGG
 static menuslider_s s_options_oggvolume_slider;
 static menulist_s s_options_enableogg_box;
+#endif
+#ifdef MP3
+static menuslider_s s_options_mp3volume_slider;
+static menulist_s s_options_enablemp3_box;
 #endif
 static menulist_s s_options_quality_list;
 static menulist_s s_options_console_action;
@@ -1124,7 +1128,7 @@ ControlsSetMenuItemValues(void)
 {
     s_options_sfxvolume_slider.curvalue = Cvar_VariableValue("s_volume") * 10;
 
-#if defined(OGG) || defined(CDA)
+#if defined(OGG) || defined(MP3) || defined(CDA)
     s_options_cdshuffle_box.curvalue = (Cvar_VariableValue("cd_shuffle") != 0);
 #endif
 
@@ -1136,6 +1140,23 @@ ControlsSetMenuItemValues(void)
     ogg = Cvar_Get("ogg_sequence", "loop", CVAR_ARCHIVE);
 
     if (!strcmp(ogg->string, "random"))
+    {
+        s_options_cdshuffle_box.curvalue = 1;
+    }
+    else
+    {
+        s_options_cdshuffle_box.curvalue = 0;
+    }
+#endif
+
+#ifdef MP3
+    s_options_mp3volume_slider.curvalue = Cvar_VariableValue("mp3_volume") * 10;
+    s_options_enablemp3_box.curvalue = (Cvar_VariableValue("mp3_enable") != 0);
+
+    cvar_t *mp3;
+    mp3 = Cvar_Get("mp3_sequence", "loop", CVAR_ARCHIVE);
+
+    if (!strcmp(mp3->string, "random"))
     {
         s_options_cdshuffle_box.curvalue = 1;
     }
@@ -1192,15 +1213,11 @@ UpdateVolumeFunc(void *unused)
     Cvar_SetValue("s_volume", s_options_sfxvolume_slider.curvalue / 10);
 }
 
-#if defined(OGG) || defined(CDA)
+#if defined(OGG) || defined(MP3) || defined(CDA)
 static void
 CDShuffleFunc(void *unused)
 {
     Cvar_SetValue("cd_shuffle", s_options_cdshuffle_box.curvalue);
-
-#ifdef OGG
-    cvar_t *ogg_enable= Cvar_Get("ogg_enable", "1", CVAR_ARCHIVE);
-	int track = (int)strtol(cl.configstrings[CS_CDTRACK], (char **)NULL, 10);
 
     if (s_options_cdshuffle_box.curvalue)
     {
@@ -1211,9 +1228,21 @@ CDShuffleFunc(void *unused)
         Cvar_Set("cd_shuffle", "0");
     }
 
+	int track = (int)strtol(cl.configstrings[CS_CDTRACK], (char **)NULL, 10);
+
+#ifdef OGG
+    cvar_t *ogg_enable = Cvar_Get("ogg_enable", "1", CVAR_ARCHIVE);
 	if (ogg_enable->value)
 	{
 		OGG_PlayTrack(track);
+	}
+#endif
+
+#ifdef MP3
+    cvar_t *mp3_enable = Cvar_Get("mp3_enable", "1", CVAR_ARCHIVE);
+	if (mp3_enable->value)
+	{
+		MP3_PlayTrack(track);
 	}
 #endif
 }
@@ -1251,6 +1280,42 @@ EnableOGGMusic(void *unused)
     else
     {
         OGG_Shutdown();
+    }
+}
+
+#endif
+
+#ifdef MP3
+
+static void
+UpdateMp3VolumeFunc(void *unused)
+{
+    Cvar_SetValue("mp3_volume", s_options_mp3volume_slider.curvalue / 10);
+}
+
+static void
+EnableMP3Music(void *unused)
+{
+    Cvar_SetValue("mp3_enable", (float)s_options_enablemp3_box.curvalue);
+#ifdef CDA
+    Cvar_SetValue("cd_nocd", 1);
+#endif
+
+    if (s_options_enablemp3_box.curvalue)
+    {
+#ifdef CDA
+        CDAudio_Stop();
+#endif
+        MP3_Init();
+	    MP3_InitTrackList();
+        MP3_Stop();
+
+        int track = (int)strtol(cl.configstrings[CS_CDTRACK], (char **)NULL, 10);
+        MP3_PlayTrack(track);
+    }
+    else
+    {
+        MP3_Shutdown();
     }
 }
 
@@ -1321,7 +1386,16 @@ Options_MenuInit(void)
     };
 #endif
 
-#if defined(OGG) || defined(CDA)
+#ifdef MP3
+    static const char *mp3_music_items[] =
+    {
+        "disabled",
+        "enabled",
+        0
+    };
+#endif
+
+#if defined(OGG) || defined(MP3) || defined(CDA)
     static const char *cd_shuffle[] =
     {
         "disabled",
@@ -1370,7 +1444,7 @@ Options_MenuInit(void)
     s_options_sfxvolume_slider.minvalue = 0;
     s_options_sfxvolume_slider.maxvalue = 10;
 
-#ifdef OGG
+#if defined(OGG)
     s_options_oggvolume_slider.generic.type = MTYPE_SLIDER;
     s_options_oggvolume_slider.generic.x = 0;
     s_options_oggvolume_slider.generic.y = 10;
@@ -1385,9 +1459,24 @@ Options_MenuInit(void)
     s_options_enableogg_box.generic.name = "OGG music";
     s_options_enableogg_box.generic.callback = EnableOGGMusic;
     s_options_enableogg_box.itemnames = ogg_music_items;
+#elif defined(MP3)
+    s_options_mp3volume_slider.generic.type = MTYPE_SLIDER;
+    s_options_mp3volume_slider.generic.x = 0;
+    s_options_mp3volume_slider.generic.y = 10;
+    s_options_mp3volume_slider.generic.name = "MP3 volume";
+    s_options_mp3volume_slider.generic.callback = UpdateMp3VolumeFunc;
+    s_options_mp3volume_slider.minvalue = 0;
+    s_options_mp3volume_slider.maxvalue = 10;
+
+    s_options_enablemp3_box.generic.type = MTYPE_SPINCONTROL;
+    s_options_enablemp3_box.generic.x = 0;
+    s_options_enablemp3_box.generic.y = 20;
+    s_options_enablemp3_box.generic.name = "MP3 music";
+    s_options_enablemp3_box.generic.callback = EnableMP3Music;
+    s_options_enablemp3_box.itemnames = mp3_music_items;
 #endif
 
-#if defined(OGG) || defined(CDA)
+#if defined(OGG) || defined(MP3) || defined(CDA)
     s_options_cdshuffle_box.generic.type = MTYPE_SPINCONTROL;
     s_options_cdshuffle_box.generic.x = 0;
     s_options_cdshuffle_box.generic.y = 30;
@@ -1481,8 +1570,11 @@ Options_MenuInit(void)
 #ifdef OGG
     Menu_AddItem(&s_options_menu, (void *)&s_options_oggvolume_slider);
     Menu_AddItem(&s_options_menu, (void *)&s_options_enableogg_box);
+#elif defined(MP3)
+    Menu_AddItem(&s_options_menu, (void *)&s_options_mp3volume_slider);
+    Menu_AddItem(&s_options_menu, (void *)&s_options_enablemp3_box);
 #endif
-#if defined(OGG) || defined(CDA)
+#if defined(OGG) || defined(MP3) || defined(CDA)
     Menu_AddItem(&s_options_menu, (void *)&s_options_cdshuffle_box);
 #endif
     Menu_AddItem(&s_options_menu, (void *)&s_options_quality_list);

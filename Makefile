@@ -20,6 +20,7 @@ else ifeq ($(platform), miyoo)
   CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
 
   DEFINES = -DYQ2ARCH=\"arm\"
+  MUSIC = mp3
 
   DEBUG_CFLAGS += -g0
   OPT_CFLAGS += -Ofast -fdata-sections -ffunction-sections -fsingle-precision-constant \
@@ -32,7 +33,23 @@ ifeq ($(LTO),1)
 	EXTRA_LDFLAGS += -flto
 endif
 
-DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\" -DOGG
+DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\"
+
+# Music playback format: mp3 (libmpg123), ogg (stb_vorbis), both, or none
+MUSIC ?= ogg
+
+ifeq ($(MUSIC), mp3)
+  DEFINES += -DMP3
+else ifeq ($(MUSIC), ogg)
+  DEFINES += -DOGG
+else ifeq ($(MUSIC), both)
+  DEFINES += -DOGG -DMP3
+endif
+
+# If MP3 support is enabled, link against libmpg123
+ifneq (,$(findstring -DMP3,$(DEFINES) $(CFLAGS)))
+  EXTRA_PKGS += libmpg123
+endif
 
 CC = $(CROSS_COMPILE)gcc
 CXX = $(CROSS_COMPILE)g++
@@ -40,9 +57,10 @@ STRIP = $(CROSS_COMPILE)strip
 SYSROOT ?= $(shell$(CC) --print-sysroot)
 SDL_CFLAGS  := $(shell $(SYSROOT)/usr/bin/sdl-config --cflags)
 SDL_LIBS   = $(shell $(SYSROOT)/usr/bin/sdl-config --libs)
+PKGS_LIBS   = $(shell $(SYSROOT)/../../usr/bin/pkg-config --libs $(EXTRA_PKGS))
 
 INCLUDES = -I. -Isrc
-LIBS = $(SDL_LIBS) $(EXTRA_LIBS)
+LIBS = $(SDL_LIBS) $(PKGS_LIBS) $(EXTRA_LIBS)
 
 CFLAGS = $(DEFINES) $(INCLUDES) $(SDL_CFLAGS) $(DEBUG_CFLAGS) $(OPT_CFLAGS) -std=gnu99
 LDFLAGS = $(EXTRA_LDFLAGS)
@@ -124,6 +142,7 @@ OBJS =  \
 	src/client/menu/qmenu.o \
 	src/client/menu/videomenu.o \
 	src/client/sound/ogg.o \
+	src/client/sound/mp3.o \
 	src/client/sound/openal.o \
 	src/client/sound/sound.o \
 	src/client/sound/wave.o \

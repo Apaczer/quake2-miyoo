@@ -361,7 +361,7 @@ CL_PrepRefresh(void)
 	cl.refresh_prepped = true;
 	cl.force_refdef = true; /* make sure we have a valid refdef */
 
-#if defined(OGG) || defined(CDA)
+#if defined(OGG) || defined(MP3) || defined(CDA)
 
 	int track = (int)strtol(cl.configstrings[CS_CDTRACK], (char **)NULL, 10);
 
@@ -375,6 +375,9 @@ CL_PrepRefresh(void)
 #ifdef OGG
 		OGG_PlayTrack(track);
 #endif
+#ifdef MP3
+		MP3_PlayTrack(track);
+#endif
 	}
 	else
 	{
@@ -387,6 +390,9 @@ CL_PrepRefresh(void)
 		OGG_PlayTrack(track);
 
  #endif
+#ifdef MP3
+		MP3_PlayTrack(track);
+#endif
 	}
 
 #endif

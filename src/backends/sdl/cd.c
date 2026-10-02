@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2001 Robert Bäuml
+ * Copyright (C) 2001 Robert BÃ¤uml
  * Copyright (C) 2002 W. P. va Paassen
  *
  * This program is free software; you can redistribute it and/or modify
@@ -332,7 +332,7 @@ CDAudio_Init()
 		return -1;
 	}
 
-#ifdef OGG
+#if defined(OGG) || defined(MP3)
 	cd_nocd = Cvar_Get("cd_nocd", "1", CVAR_ARCHIVE);
 #else
 	cd_nocd = Cvar_Get("cd_nocd", "0", CVAR_ARCHIVE);

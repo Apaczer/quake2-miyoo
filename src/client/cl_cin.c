@@ -636,6 +636,9 @@ SCR_PlayCinematic(char *arg)
 #ifdef OGG
 	OGG_Stop();
 #endif
+#ifdef MP3
+	MP3_Stop();
+#endif
 
 	cl.cinematicframe = 0;
 	dot = strstr(arg, ".");

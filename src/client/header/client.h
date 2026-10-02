@@ -56,6 +56,9 @@
 #include "../sound/header/cdaudio.h"
 #include "../sound/header/sound.h"
 #include "../sound/header/vorbis.h"
+#ifdef MP3
+#include "../sound/header/mp3.h"
+#endif
 
 typedef struct
 {
