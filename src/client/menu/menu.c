@@ -1724,6 +1724,7 @@ static const char *idcredits[] = {
 	"Sander van Dijk",
 	"Denis Pauk",
 	"Port to RS97 by gameblabla",
+	"MP3 backend by Apaczer",
 	"Quake II(tm) (C)1997 Id Software, Inc.",
 	"All Rights Reserved.  Distributed by",
 	"Activision, Inc. under license.",
