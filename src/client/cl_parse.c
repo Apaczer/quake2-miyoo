@@ -1096,6 +1096,10 @@ CL_ParseConfigString(void)
 #ifdef MP3
 			MP3_PlayTrack(track);
 #endif
+
+#ifdef WAV_MUSIC
+			WAV_PlayTrack(track);
+#endif
 		}
 	}
 	else if ((i >= CS_MODELS) && (i < CS_MODELS + MAX_MODELS))

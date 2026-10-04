@@ -59,6 +59,9 @@
 #ifdef MP3
 #include "../sound/header/mp3.h"
 #endif
+#ifdef WAV_MUSIC
+#include "../sound/header/wav_music.h"
+#endif
 
 typedef struct
 {

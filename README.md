@@ -16,7 +16,7 @@ The Yamagi Quake II Client is an enhanced version of id Software's Quake II with
 - cross-compile (MiyooCFW)  
 `make -j$(nproc) platform=miyoo`
 
-You change music playback backend in Makefile or by passing MUSIC=<backend_name> flag to make cmd, either "ogg" (default) for independent `stb_vorbis` or "mp3" for ext. `libmpg123` or "both" (experimental).
+You change music playback backend in Makefile or by passing MUSIC=<backend_name> flag to make cmd, either "ogg" (default) for independent `stb_vorbis`, "mp3" for ext. `libmpg123`, "wav" for native `SDL_LoadWAV`, or "both" (experimental).
 
 ### Requirements
 

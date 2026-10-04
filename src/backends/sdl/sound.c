@@ -49,6 +49,9 @@
 #ifdef MP3
 #include "../../client/sound/header/mp3.h"
 #endif
+#ifdef WAV_MUSIC
+#include "../../client/sound/header/wav_music.h"
+#endif
 
 /* Defines */
 #define SDL_PAINTBUFFER_SIZE 2048
@@ -1198,6 +1201,11 @@ SDL_Update(void)
 #ifdef MP3
 	/* stream mp3 music */
 	MP3_Stream();
+#endif
+
+#ifdef WAV_MUSIC
+	/* stream wav music */
+	WAV_Stream();
 #endif
 
 	if (!sound.buffer)

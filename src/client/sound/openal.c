@@ -41,6 +41,9 @@
 #ifdef MP3
 #include "header/mp3.h"
 #endif
+#ifdef WAV_MUSIC
+#include "header/wav_music.h"
+#endif
 
 /* translates from AL coordinate system to quake */
 #define AL_UnpackVector(v) - v[1], v[2], -v[0]
@@ -690,6 +693,10 @@ AL_Update(void)
 
 #ifdef MP3
 	MP3_Stream();
+#endif
+
+#ifdef WAV_MUSIC
+	WAV_Stream();
 #endif
 
 	AL_StreamUpdate();

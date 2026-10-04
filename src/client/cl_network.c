@@ -326,6 +326,9 @@ CL_Disconnect(void)
 #ifdef MP3
 	MP3_Stop();
 #endif
+#ifdef WAV_MUSIC
+	WAV_Stop();
+#endif
 #ifdef CDA
 	CDAudio_Stop();
 #endif

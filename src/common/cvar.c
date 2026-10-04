@@ -39,6 +39,8 @@ typedef struct
 replacement_t replacements[] = {
 #if defined(MP3) && !defined(OGG)
 	{"cd_shuffle", "mp3_shuffle"},
+#elif defined(WAV_MUSIC) && !defined(OGG) && !defined(MP3)
+	{"cd_shuffle", "wav_shuffle"},
 #else
 	{"cd_shuffle", "ogg_shuffle"},
 #endif

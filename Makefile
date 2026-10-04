@@ -35,13 +35,16 @@ endif
 
 DEFINES += -DSDL -DYQ2OSTYPE=\"Linux\"
 
-# Music playback format: mp3 (libmpg123), ogg (stb_vorbis), both, or none
+# Music playback format: mp3 (libmpg123), ogg (stb_vorbis), wav (SDL_LoadWAV),
+#   both (ogg+mp3), or none
 MUSIC ?= ogg
 
 ifeq ($(MUSIC), mp3)
   DEFINES += -DMP3
 else ifeq ($(MUSIC), ogg)
   DEFINES += -DOGG
+else ifeq ($(MUSIC), wav)
+  DEFINES += -DWAV_MUSIC
 else ifeq ($(MUSIC), both)
   DEFINES += -DOGG -DMP3
 endif
@@ -143,6 +146,7 @@ OBJS =  \
 	src/client/menu/videomenu.o \
 	src/client/sound/ogg.o \
 	src/client/sound/mp3.o \
+	src/client/sound/wav_music.o \
 	src/client/sound/openal.o \
 	src/client/sound/sound.o \
 	src/client/sound/wave.o \

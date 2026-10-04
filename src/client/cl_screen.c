@@ -576,6 +576,9 @@ SCR_BeginLoadingPlaque(void)
 #ifdef MP3
 	MP3_Stop();
 #endif
+#ifdef WAV_MUSIC
+	WAV_Stop();
+#endif
 
 	if (cls.disable_screen)
 	{

@@ -332,7 +332,7 @@ CDAudio_Init()
 		return -1;
 	}
 
-#if defined(OGG) || defined(MP3)
+#if defined(OGG) || defined(MP3) || defined(WAV_MUSIC)
 	cd_nocd = Cvar_Get("cd_nocd", "1", CVAR_ARCHIVE);
 #else
 	cd_nocd = Cvar_Get("cd_nocd", "0", CVAR_ARCHIVE);

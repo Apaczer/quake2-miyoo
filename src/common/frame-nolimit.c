@@ -122,6 +122,11 @@ Qcommon_Buildstring(void)
 #else
 	printf(" - MP3 (libmpg123)\n");
 #endif
+#ifdef WAV_MUSIC
+	printf(" + WAV music (SDL)\n");
+#else
+	printf(" - WAV music (SDL)\n");
+#endif
 #ifdef USE_OPENAL
 	printf(" + OpenAL audio\n");
 #else

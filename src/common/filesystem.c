@@ -33,6 +33,9 @@
 #ifdef MP3
 #include "../client/sound/header/mp3.h"
 #endif
+#ifdef WAV_MUSIC
+#include "../client/sound/header/wav_music.h"
+#endif
 
 
 #define MAX_HANDLES 512
@@ -1659,6 +1662,9 @@ FS_BuildGameSpecificSearchPath(char *dir)
 #ifdef MP3
 	MP3_InitTrackList();
 #endif
+#ifdef WAV_MUSIC
+	WAV_InitTrackList();
+#endif
 #endif
 }
 
@@ -1760,6 +1766,9 @@ FS_InitFilesystem(void)
 #endif
 #ifdef MP3
 		MP3_InitTrackList();
+#endif
+#ifdef WAV_MUSIC
+		WAV_InitTrackList();
 #endif
 	}
 #endif

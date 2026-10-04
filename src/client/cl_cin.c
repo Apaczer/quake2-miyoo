@@ -639,6 +639,9 @@ SCR_PlayCinematic(char *arg)
 #ifdef MP3
 	MP3_Stop();
 #endif
+#ifdef WAV_MUSIC
+	WAV_Stop();
+#endif
 
 	cl.cinematicframe = 0;
 	dot = strstr(arg, ".");

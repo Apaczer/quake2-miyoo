@@ -35,6 +35,9 @@
 #ifdef MP3
 #include "header/mp3.h"
 #endif
+#ifdef WAV_MUSIC
+#include "header/wav_music.h"
+#endif
 
 /* During registration it is possible to have more sounds
    than could actually be referenced during gameplay,
@@ -1095,6 +1098,10 @@ S_Init(void)
 	MP3_Init();
 #endif
 
+#ifdef WAV_MUSIC
+	WAV_Init();
+#endif
+
 	Com_Printf("Sound sampling rate: %i\n", sound.speed);
 	S_StopAllSounds();
 
@@ -1124,6 +1131,10 @@ S_Shutdown(void)
 
 #ifdef MP3
 	MP3_Shutdown();
+#endif
+
+#ifdef WAV_MUSIC
+	WAV_Shutdown();
 #endif
 
 	/* free all sounds */

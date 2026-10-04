@@ -913,6 +913,9 @@ CL_Shutdown(void)
 #ifdef MP3
 	MP3_Stop();
 #endif
+#ifdef WAV_MUSIC
+	WAV_Stop();
+#endif
 	S_Shutdown();
 	IN_Shutdown();
 	VID_Shutdown();
