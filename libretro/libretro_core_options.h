@@ -67,6 +67,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       NULL,
       NULL,
       {
+         { "160x120",    NULL },
          { "320x240",    NULL },
          { "400x240",    NULL },
          { "480x272",    NULL },
@@ -101,7 +102,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #endif
          { NULL, NULL },
       },
-#if defined(DINGUX)
+#if defined(MIYOO)
+      "160x120"
+#elif defined(DINGUX)
       "320x240"
 #elif defined(_3DS)
       "400x240"
@@ -118,6 +121,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       NULL,
       {
          { "auto", "Auto" },
+         { "15",   "15 fps" },
          { "30",   "30 fps" },
          { "50",   "50 fps" },
          { "60",   "60 fps" },
@@ -139,7 +143,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "360",  "360 fps" },
          { NULL, NULL },
       },
-#if defined(DINGUX) || defined(_3DS)
+#if defined(MIYOO)
+      "15"
+#elif defined(DINGUX) || defined(_3DS)
       "30"
 #else
       "auto"

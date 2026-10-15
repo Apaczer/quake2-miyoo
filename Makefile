@@ -230,6 +230,15 @@ else ifeq ($(platform), gcw0)
    SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
    CFLAGS += -DDINGUX -D_POSIX_C_SOURCE=199309L -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
    HAVE_OPENGL = 0
+# MIYOO
+else ifeq ($(platform), miyoo)
+   TARGET := $(TARGET_NAME)_libretro.so
+   CC = arm-linux-gcc
+   AR = arm-linux-ar
+   fpic := -fPIC
+   SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
+   CFLAGS += -DMIYOO -fomit-frame-pointer -ffast-math -mcpu=arm926ej-s
+   HAVE_OPENGL = 0
 else
    CC ?= gcc
    TARGET := $(TARGET_NAME)_libretro.dll
