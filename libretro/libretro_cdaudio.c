@@ -120,7 +120,11 @@ void CDAudio_Play(int track, qboolean looping)
 #if defined(HAVE_STB_VORBIS)
       cdaudio_sound = core_audio_mixer_load_ogg(file_contents, file_len);
 #elif defined(HAVE_RWAV)
+#if defined (HAVE_NEAREST_RESAMPLER)
+      cdaudio_sound = core_audio_mixer_load_wav(file_contents, file_len, nearest_resampler.ident, RESAMPLER_QUALITY_LOWEST);
+#else
       cdaudio_sound = core_audio_mixer_load_wav(file_contents, file_len, sinc_resampler.ident, RESAMPLER_QUALITY_NORMAL);
+#endif
 #endif
 
       if (!cdaudio_sound)
@@ -128,7 +132,11 @@ void CDAudio_Play(int track, qboolean looping)
 
       /* Start 'playing' track file */
       cdaudio_voice = core_audio_mixer_play(cdaudio_sound,
+#if defined (HAVE_NEAREST_RESAMPLER)
+            looping, 1.0f, nearest_resampler.ident, RESAMPLER_QUALITY_LOWEST,
+#else
             looping, 1.0f, sinc_resampler.ident, RESAMPLER_QUALITY_NORMAL,
+#endif
             cdaudio_stop_cb);
 
       if (!cdaudio_voice)
