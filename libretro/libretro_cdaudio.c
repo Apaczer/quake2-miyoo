@@ -80,6 +80,7 @@ void CDAudio_Play(int track, qboolean looping)
        string_is_empty(g_music_dir))
       goto error;
 
+#if defined(HAVE_STB_VORBIS)
    /* Get track file path
     * > Try XX.ogg */
    snprintf(file_name, sizeof(file_name), "%02i.ogg", track);
@@ -94,21 +95,40 @@ void CDAudio_Play(int track, qboolean looping)
       if (!path_is_valid(file_path))
          goto error;
    }
+#elif defined(HAVE_RWAV)
+   /* Get track file path
+    * > Try XX.ogg */
+   snprintf(file_name, sizeof(file_name), "%02i.wav", track);
+   fill_pathname_join(file_path, g_music_dir, file_name, sizeof(file_path));
 
+   if (!path_is_valid(file_path))
+   {
+      /* Try trackXX.ogg */
+      snprintf(file_name, sizeof(file_name), "track%02i.wav", track);
+      fill_pathname_join(file_path, g_music_dir, file_name, sizeof(file_path));
+
+      if (!path_is_valid(file_path))
+         goto error;
+   }
+#endif
    /* Load track file */
    if (filestream_read_file(file_path, &file_contents, &file_len))
    {
       if (file_len < 1)
          goto error;
 
+#if defined(HAVE_STB_VORBIS)
       cdaudio_sound = core_audio_mixer_load_ogg(file_contents, file_len);
+#elif defined(HAVE_RWAV)
+      cdaudio_sound = core_audio_mixer_load_wav(file_contents, file_len, sinc_resampler.ident, RESAMPLER_QUALITY_NORMAL);
+#endif
 
       if (!cdaudio_sound)
          goto error;
 
       /* Start 'playing' track file */
       cdaudio_voice = core_audio_mixer_play(cdaudio_sound,
-            looping, 1.0f, "sinc", RESAMPLER_QUALITY_NORMAL,
+            looping, 1.0f, sinc_resampler.ident, RESAMPLER_QUALITY_NORMAL,
             cdaudio_stop_cb);
 
       if (!cdaudio_voice)
