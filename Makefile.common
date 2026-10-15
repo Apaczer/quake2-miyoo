@@ -44,6 +44,7 @@ SYSTEM_COMM_AUDIO = \
 	$(LIBRETRO_COMM_DIR)/audio/resampler/drivers/sinc_resampler.c \
 	$(LIBRETRO_COMM_DIR)/file/config_file.c \
 	$(LIBRETRO_COMM_DIR)/file/config_file_userdata.c \
+	$(LIBRETRO_COMM_DIR)/formats/wav/rwav.c \
 	$(LIBRETRO_COMM_DIR)/lists/string_list.c \
 	$(LIBRETRO_COMM_DIR)/memmap/memalign.c
 
