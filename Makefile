@@ -2,6 +2,8 @@ STATIC_LINKING := 0
 AR             := ar
 HAVE_OPENGL    := 0
 HAVE_CDAUDIO   := 1
+HAVE_OGG       := 1
+HAVE_WAV       := 0
 
 ifneq ($(V),1)
    Q := @
@@ -239,6 +241,8 @@ else ifeq ($(platform), miyoo)
    SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
    CFLAGS += -DMIYOO -fomit-frame-pointer -ffast-math -mcpu=arm926ej-s
    HAVE_OPENGL = 0
+   HAVE_OGG = 0
+   HAVE_WAV = 1
 else
    CC ?= gcc
    TARGET := $(TARGET_NAME)_libretro.dll
@@ -282,7 +286,12 @@ CFLAGS   += -DHAVE_OPENGL
 endif
 
 ifeq ($(HAVE_CDAUDIO),1)
-CFLAGS   += -DHAVE_CDAUDIO -DHAVE_STB_VORBIS
+CFLAGS   += -DHAVE_CDAUDIO
+ifeq ($(HAVE_OGG),1)
+CFLAGS   += -DHAVE_STB_VORBIS
+else ifeq ($(HAVE_WAV),1)
+CFLAGS   += -DHAVE_RWAV
+endif
 endif
 
 ifeq ($(basegame),xatrix)
