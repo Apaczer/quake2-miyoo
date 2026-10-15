@@ -166,7 +166,7 @@ void RE_Draw_StretchPicImplementation (int x, int y, int w, int h, image_t	*pic)
 		(x + w > vid.width) ||
 		(y + h > vid.height))
 	{
-		ri.Sys_Error (ERR_FATAL,"Draw_Pic: bad coordinates");
+		//ri.Sys_Error (ERR_FATAL,"Draw_Pic: bad coordinates");
 	}
 
 	height = h;
@@ -258,7 +258,7 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 		(x + pic->width > vid.width) ||
 		(y + pic->height > vid.height))
 	{
-		R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
+		//R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
 		return;
 	}
 
