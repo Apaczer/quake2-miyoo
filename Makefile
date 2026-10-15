@@ -239,7 +239,7 @@ else ifeq ($(platform), miyoo)
    AR = arm-linux-ar
    fpic := -fPIC
    SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
-   CFLAGS += -DMIYOO -fomit-frame-pointer -ffast-math -mcpu=arm926ej-s
+   CFLAGS += -DMIYOO -DHAVE_NEAREST_RESAMPLER -fomit-frame-pointer -ffast-math -mcpu=arm926ej-s
    HAVE_OPENGL = 0
    HAVE_OGG = 0
    HAVE_WAV = 1
