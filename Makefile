@@ -19,7 +19,7 @@ else ifeq ($(platform), miyoo)
   CHAINPREFIX  ?= /opt/miyoo
   CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
 
-  DEFINES = -DYQ2ARCH=\"arm\"
+  DEFINES = -DYQ2ARCH=\"arm\" -DMIYOO
   MUSIC = mp3
 
   DEBUG_CFLAGS += -g0
