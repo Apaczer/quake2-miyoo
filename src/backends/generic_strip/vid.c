@@ -81,6 +81,9 @@ vidmode_t vid_modes[] = {
 	{"Mode  0:  480x272", 480, 272, 1},
 #elif defined(PAPK3S)
 	{"Mode  0:  800x480", 800, 480, 1},
+#elif defined(LOW_RES)
+	{"Mode  0:  160x120 upscaled (x2)", 160, 120, 0},
+	{"Mode  1:  320x240", 320, 240, 1},
 #else
 	{"Mode  0:  320x240", 320, 240, 0},
 	{"Mode  1:  400x300", 400, 300, 1},

@@ -1676,6 +1676,12 @@ SWimp_InitGraphics(int fullscreen, int *pwidth, int *pheight)
 		}
 	}
 
+#if defined(LOW_RES)
+	if (r_mode->value == 0) {
+		width += width;
+		height += height;
+	}
+#endif
 	SWimp_DestroyRender();
 
 	// let the sound and input subsystems know about the new window
@@ -1774,14 +1780,43 @@ RE_EndFrame (void)
 					);
 	}
 
-	Uint16 * pixels = (Uint16 *)window->pixels;
-	for (y=0; y < vid.height;  y++)
-	{
-		for (x=0; x < vid.width; x ++)
+#if defined(LOW_RES)
+	if (r_mode->value == 0) {
+		Uint32 pallete_colors32[256];
+		Uint8 *win_pixels = (Uint8 *)window->pixels;
+		int pitch = window->pitch;
+
+		for (i = 0; i < 256; i++)
 		{
-			int buffer_pos = y * vid.width + x;
-			Uint32 color = pallete_colors[vid_buffer[buffer_pos]];
-			pixels[(y) * window->pitch / sizeof(Uint16) + x] = color;
+			Uint32 c = pallete_colors[i] & 0xFFFF;
+			pallete_colors32[i] = c | (c << 16);
+		}
+
+		for (y = 0; y < 120; y++)
+		{
+			const pixel_t *src = &vid_buffer[y * 160];
+			Uint32 *dst0 = (Uint32 *)(win_pixels + (y * 2) * pitch);
+			Uint32 *dst1 = (Uint32 *)(win_pixels + (y * 2 + 1) * pitch);
+
+			for (x = 0; x < 160; x++)
+			{
+				Uint32 c32 = pallete_colors32[src[x]];
+				dst0[x] = c32;
+				dst1[x] = c32;
+			}
+		}
+	} else
+#endif 
+	{
+		Uint16 * pixels = (Uint16 *)window->pixels;
+		for (y=0; y < vid.height;  y++)
+		{
+			for (x=0; x < vid.width; x ++)
+			{
+				int buffer_pos = y * vid.width + x;
+				Uint32 color = pallete_colors[vid_buffer[buffer_pos]];
+				pixels[(y) * window->pitch / sizeof(Uint16) + x] = color;
+			}
 		}
 	}
 	SDL_Flip(window);

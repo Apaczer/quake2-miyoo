@@ -247,6 +247,10 @@ VID_MenuInit(void)
 	};
 
 	static const char *resolutions[] = {
+#if defined(LOW_RES)
+		"[160 120 (x2)]",
+		"[320 240     ]",
+#else
 		"[320 240   ]",
 		"[400 300   ]",
 		"[512 384   ]",
@@ -279,6 +283,7 @@ VID_MenuInit(void)
 		"[3840 2160 ]",
 		"[4096 2160 ]",
 		"[5120 2880 ]",
+#endif
 		"[custom    ]",
 		0
 	};
