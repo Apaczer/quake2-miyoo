@@ -172,7 +172,7 @@ ApplyChanges(void *unused)
 	if (s_mode_list.curvalue != GetCustomValue(&s_mode_list))
 	{
 		/* Restarts automatically */
-		Cvar_SetValue("r_mode", 0);
+		Cvar_SetValue("r_mode", s_mode_list.curvalue);
 	}
 	else
 	{
