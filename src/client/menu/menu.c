@@ -618,28 +618,28 @@ M_Main_Draw(void)
         totalheight += (h + 12);
     }
 
-    ystart = (viddef.height / (2 * scale) - 110);
+    ystart = (viddef.height / (scale) - 110);
     xoffset = (viddef.width / scale - widest + 70) / 2;
 
     for (i = 0; names[i] != 0; i++)
     {
         if (i != m_main_cursor)
         {
-            Draw_PicScaled(xoffset * scale, (ystart + i * 40 + 13) * scale, names[i], scale);
+            Draw_PicScaled(xoffset * scale, (ystart + i * 40 + 13) * scale * 0.5, names[i], scale);
         }
     }
 
     strcpy(litname, names[m_main_cursor]);
     strcat(litname, "_sel");
-    Draw_PicScaled(xoffset * scale, (ystart + m_main_cursor * 40 + 13) * scale, litname, scale);
+    Draw_PicScaled(xoffset * scale, (ystart + m_main_cursor * 40 + 13) * scale * 0.5, litname, scale);
 
     M_DrawCursor(xoffset - 25, ystart + m_main_cursor * 40 + 11,
                  (int)(cls.realtime / 100) % NUM_CURSOR_FRAMES);
 
     Draw_GetPicSize(&w, &h, "m_main_plaque");
-    Draw_PicScaled((xoffset - 30 - w) * scale, ystart * scale, "m_main_plaque", scale);
+    Draw_PicScaled((xoffset - 30 - w) * scale, ystart * scale * 0.5, "m_main_plaque", scale);
 
-    Draw_PicScaled((xoffset - 30 - w) * scale, (ystart + h + 5) * scale, "m_main_logo", scale);
+    Draw_PicScaled((xoffset - 30 - w) * scale, (ystart + h + 5) * scale * 0.5, "m_main_logo", scale);
 }
 
 const char *

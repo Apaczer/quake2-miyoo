@@ -244,9 +244,12 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 	pixel_t		*dest;
 	byte 		*source;
 	int			v, u, xpos, ypos, iscale;
-	int			height;
+	int			width, height;
 
 	iscale = (int)scale;
+	if (iscale < 1)
+		return;
+
 	pic = RE_Draw_FindPic (name);
 	if (!pic)
 	{
@@ -254,20 +257,26 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 		return;
 	}
 
+	width = pic->width >> 1;
+	height = pic->height >> 1;
+	if (width <= 0 || height <= 0)
+		return;
+
 	if ((x < 0) ||
-		(x + pic->width > vid.width) ||
-		(y + pic->height > vid.height))
+		(x + width * iscale > vid.width) ||
+		(y + height * iscale > vid.height))
 	{
 		//R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
 		return;
 	}
 
-	height = pic->height;
 	source = pic->pixels[0];
 	if (y < 0)
 	{
 		height += y;
-		source += pic->width*-y;
+		if (height <= 0)
+			return;
+		source += pic->width * (-y * 2);
 		y = 0;
 	}
 
@@ -275,39 +284,41 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 
 	if (!pic->transparent)
 	{
-		for (v=0; v<height; v++)
+		for (v = 0; v < height; v++)
 		{
-			for(ypos=0; ypos < iscale; ypos++)
+			for (ypos = 0; ypos < iscale; ypos++)
 			{
-				for (u=0; u<pic->width; u++)
+				for (u = 0; u < width; u++)
 				{
-					for(xpos=0; xpos < iscale; xpos++)
+					for (xpos = 0; xpos < iscale; xpos++)
 					{
-						dest[u * iscale + xpos] = source[u];
+						dest[u * iscale + xpos] = source[u * 2];
 					}
 				}
 				dest += vid.width;
 			}
-			source += pic->width;
+			source += pic->width * 2;
 		}
 	}
 	else
 	{
-		for (v=0; v<height; v++)
+		for (v = 0; v < height; v++)
 		{
-			for(ypos=0; ypos < iscale; ypos++)
+			for (ypos = 0; ypos < iscale; ypos++)
 			{
-				for (u=0; u<pic->width; u++)
+				for (u = 0; u < width; u++)
 				{
-					if (source[u] != TRANSPARENT_COLOR)
-						for(xpos=0; xpos < iscale; xpos++)
+					if (source[u * 2] != TRANSPARENT_COLOR)
+					{
+						for (xpos = 0; xpos < iscale; xpos++)
 						{
-							dest[u * iscale + xpos] = source[u];
+							dest[u * iscale + xpos] = source[u * 2];
 						}
+					}
 				}
 				dest += vid.width;
 			}
-			source += pic->width;
+			source += pic->width * 2;
 		}
 	}
 }
