@@ -65,6 +65,7 @@ GetRenderer(void)
 	/* First element in array is 'OpenGL 1.4' aka gl1.
 	   Second element in array is 'OpenGL 3.2' aka gl3.
 	   Third element in array is unknown renderer. */
+#ifndef NO_GL
 	if (Q_stricmp(vid_renderer->string, "gl1") == 0)
 	{
 		return 0;
@@ -81,6 +82,16 @@ GetRenderer(void)
 	{
 		return 3;
 	}
+#else
+	if (Q_stricmp(vid_renderer->string, "soft") == 0)
+	{
+		return 0;
+	}
+	else
+	{
+		return 1;
+	}
+#endif
 }
 
 static int
@@ -151,6 +162,7 @@ ApplyChanges(void *unused)
 		/*  First element in array is 'OpenGL 1.4' aka gl1.
 			Second element in array is 'OpenGL 3.2' aka gl3.
 			Third element in array is unknown renderer. */
+#ifndef NO_GL
 		if (s_renderer_list.curvalue == 0)
 		{
 			Cvar_Set("vid_renderer", "gl1");
@@ -166,6 +178,13 @@ ApplyChanges(void *unused)
 			Cvar_Set("vid_renderer", "soft");
 			restart = true;
 		}
+#else
+		if (s_renderer_list.curvalue == 0)
+		{
+			Cvar_Set("vid_renderer", "soft");
+			restart = true;
+		}
+#endif
 	}
 
 	/* custom mode */
@@ -239,8 +258,10 @@ VID_MenuInit(void)
 	int y = 0;
 
 	static const char *renderers[] = {
+#ifndef NO_GL
 			"[OpenGL 1.4]",
 			"[OpenGL 3.2]",
+#endif
 			"[Software  ]",
 			"[Custom    ]",
 			0
@@ -359,7 +380,11 @@ VID_MenuInit(void)
 
 	if (!vid_renderer)
 	{
+#ifndef NO_GL
 		vid_renderer = Cvar_Get("vid_renderer", "gl1", CVAR_ARCHIVE);
+#else
+		vid_renderer = Cvar_Get("vid_renderer", "soft", CVAR_ARCHIVE);
+#endif
 	}
 
 	if (!r_vsync)
