@@ -34,6 +34,8 @@
 #include "../sound/header/local.h"
 #include "header/qmenu.h"
 
+static cvar_t *r_mode;
+
 static int m_main_cursor;
 
 /* Number of the frames of the spinning quake logo */
@@ -606,6 +608,9 @@ M_Main_Draw(void)
         0
     };
 
+    float freductor = 1.0;
+    int ireductor = 0;
+    
     for (i = 0; names[i] != 0; i++)
     {
         Draw_GetPicSize(&w, &h, names[i]);
@@ -618,28 +623,39 @@ M_Main_Draw(void)
         totalheight += (h + 12);
     }
 
-    ystart = (viddef.height / (2 * scale) - 110);
+#ifdef LOW_RES
+    if (!r_mode)
+    {
+        r_mode = Cvar_Get("r_mode", "0", 0);
+    }
+
+    if (r_mode->value == 0) {
+        freductor = 0.5;
+        ireductor = 20;
+    }
+#endif
+    ystart = (viddef.height / (2 * scale * freductor) - 110);
     xoffset = (viddef.width / scale - widest + 70) / 2;
 
     for (i = 0; names[i] != 0; i++)
     {
         if (i != m_main_cursor)
         {
-            Draw_PicScaled(xoffset * scale, (ystart + i * 40 + 13) * scale, names[i], scale);
+            Draw_PicScaled(xoffset * scale, (ystart + i * 40 + 13) * scale * freductor, names[i], scale);
         }
     }
 
     strcpy(litname, names[m_main_cursor]);
     strcat(litname, "_sel");
-    Draw_PicScaled(xoffset * scale, (ystart + m_main_cursor * 40 + 13) * scale, litname, scale);
+    Draw_PicScaled(xoffset * scale, (ystart + m_main_cursor * 40 + 13) * scale * freductor, litname, scale);
 
-    M_DrawCursor(xoffset - 25, ystart + m_main_cursor * 40 + 11,
-                 (int)(cls.realtime / 100) % NUM_CURSOR_FRAMES);
+    M_DrawCursor(xoffset - 25 + ireductor, ystart + m_main_cursor * (40 - ireductor) + (int)(11 * freductor),
+                    (int)(cls.realtime / 100) % NUM_CURSOR_FRAMES);
 
     Draw_GetPicSize(&w, &h, "m_main_plaque");
-    Draw_PicScaled((xoffset - 30 - w) * scale, ystart * scale, "m_main_plaque", scale);
+    Draw_PicScaled((xoffset - 30 - w) * scale, ystart * scale * freductor, "m_main_plaque", scale);
 
-    Draw_PicScaled((xoffset - 30 - w) * scale, (ystart + h + 5) * scale, "m_main_logo", scale);
+    Draw_PicScaled((xoffset - 30 - w) * scale, (ystart + h + 5) * scale * freductor, "m_main_logo", scale);
 }
 
 const char *
@@ -4521,8 +4537,21 @@ M_Quit_Draw(void)
     int w, h;
 	float scale = SCR_GetMenuScale();
 
+    int zreductor = 1;
+#ifdef LOW_RES
+    if (!r_mode)
+    {
+        r_mode = Cvar_Get("r_mode", "0", 0);
+    }
+
+    if (r_mode->value == 0)
+    {
+        zreductor = 0;
+    }
+#endif
+
     Draw_GetPicSize(&w, &h, "quit");
-    Draw_PicScaled((viddef.width - w * scale) / 2, (viddef.height - h * scale) / 2, "quit", scale);
+    Draw_PicScaled((viddef.width - w * scale) / 2 * zreductor, (viddef.height - h * scale) / 2 * zreductor, "quit", scale);
 }
 
 static void
@@ -4559,6 +4588,9 @@ M_Init(void)
         Com_sprintf(buffer, sizeof(buffer), "adr%d", index);
         Cvar_Get(buffer, "", CVAR_ARCHIVE);
     }
+#ifdef LOW_RES
+    r_mode = Cvar_Get("r_mode", "0", 0);
+#endif
 }
 
 void

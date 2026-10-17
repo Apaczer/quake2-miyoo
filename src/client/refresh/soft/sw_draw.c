@@ -254,60 +254,134 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 		return;
 	}
 
-	if ((x < 0) ||
-		(x + pic->width > vid.width) ||
-		(y + pic->height > vid.height))
+#ifdef LOW_RES
+	if (r_mode->value == 0)
 	{
-		//R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
-		/* return; */
-	}
+		int width;
 
-	height = pic->height;
-	source = pic->pixels[0];
-	if (y < 0)
-	{
-		height += y;
-		source += pic->width*-y;
-		y = 0;
-	}
+		width = pic->width >> 1;
+		height = pic->height >> 1;
+		if (width <= 0 || height <= 0)
+			return;
 
-	dest = vid_buffer + y * vid.width + x;
-
-	if (!pic->transparent)
-	{
-		for (v=0; v<height; v++)
+		if ((x < 0) ||
+			(x + width * iscale > vid.width) ||
+			(y + height * iscale > vid.height))
 		{
-			for(ypos=0; ypos < iscale; ypos++)
+			//R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
+			/* return; */
+		}
+
+		source = pic->pixels[0];
+		if (y < 0)
+		{
+			height += y;
+			if (height <= 0)
+				return;
+			source += pic->width * (-y * 2);
+			y = 0;
+		}
+
+		dest = vid_buffer + y * vid.width + x;
+
+		if (!pic->transparent)
+		{
+			for (v = 0; v < height; v++)
 			{
-				for (u=0; u<pic->width; u++)
+				for (ypos = 0; ypos < iscale; ypos++)
 				{
-					for(xpos=0; xpos < iscale; xpos++)
+					for (u = 0; u < width; u++)
 					{
-						dest[u * iscale + xpos] = source[u];
+						for (xpos = 0; xpos < iscale; xpos++)
+						{
+							dest[u * iscale + xpos] = source[u * 2];
+						}
 					}
+					dest += vid.width;
 				}
-				dest += vid.width;
+				source += pic->width * 2;
 			}
-			source += pic->width;
+		}
+		else
+		{
+			for (v = 0; v < height; v++)
+			{
+				for (ypos = 0; ypos < iscale; ypos++)
+				{
+					for (u = 0; u < width; u++)
+					{
+						if (source[u * 2] != TRANSPARENT_COLOR)
+						{
+							for (xpos = 0; xpos < iscale; xpos++)
+							{
+								dest[u * iscale + xpos] = source[u * 2];
+							}
+						}
+					}
+					dest += vid.width;
+				}
+				source += pic->width * 2;
+			}
 		}
 	}
 	else
+#endif
 	{
-		for (v=0; v<height; v++)
+		if ((x < 0) ||
+			(x + pic->width > vid.width) ||
+			(y + pic->height > vid.height))
 		{
-			for(ypos=0; ypos < iscale; ypos++)
+			//R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
+			/* return; */
+		}
+
+		height = pic->height;
+		source = pic->pixels[0];
+		if (y < 0)
+		{
+			height += y;
+			source += pic->width * -y;
+			y = 0;
+		}
+
+		dest = vid_buffer + y * vid.width + x;
+
+		if (!pic->transparent)
+		{
+			for (v = 0; v < height; v++)
 			{
-				for (u=0; u<pic->width; u++)
+				for (ypos = 0; ypos < iscale; ypos++)
 				{
-					if (source[u] != TRANSPARENT_COLOR)
-						for(xpos=0; xpos < iscale; xpos++)
+					for (u = 0; u < pic->width; u++)
+					{
+						for (xpos = 0; xpos < iscale; xpos++)
 						{
 							dest[u * iscale + xpos] = source[u];
 						}
+					}
+					dest += vid.width;
 				}
-				dest += vid.width;
+				source += pic->width;
 			}
-			source += pic->width;
+		}
+		else
+		{
+			for (v = 0; v < height; v++)
+			{
+				for (ypos = 0; ypos < iscale; ypos++)
+				{
+					for (u = 0; u < pic->width; u++)
+					{
+						if (source[u] != TRANSPARENT_COLOR)
+							for (xpos = 0; xpos < iscale; xpos++)
+							{
+								dest[u * iscale + xpos] = source[u];
+							}
+					}
+					dest += vid.width;
+				}
+				source += pic->width;
+			}
 		}
 	}
 }

@@ -116,7 +116,7 @@ cvar_t	*sw_drawflat;
 cvar_t	*sw_draworder;
 static cvar_t	*sw_maxedges;
 static cvar_t	*sw_maxsurfs;
-static cvar_t  *r_mode;
+cvar_t  *r_mode;
 static cvar_t	*sw_reportedgeout;
 static cvar_t	*sw_reportsurfout;
 cvar_t  *sw_stipplealpha;
