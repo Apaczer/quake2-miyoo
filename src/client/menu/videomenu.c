@@ -239,8 +239,10 @@ VID_MenuInit(void)
 	int y = 0;
 
 	static const char *renderers[] = {
+#ifndef NO_GL
 			"[OpenGL 1.4]",
 			"[OpenGL 3.2]",
+#endif
 			"[Software  ]",
 			"[Custom    ]",
 			0
