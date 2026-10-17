@@ -4522,7 +4522,7 @@ M_Quit_Draw(void)
 	float scale = SCR_GetMenuScale();
 
     Draw_GetPicSize(&w, &h, "quit");
-    Draw_PicScaled((viddef.width - w * scale) / 2, (viddef.height - h * scale) / 2, "quit", scale);
+    Draw_PicScaled(0, 0, "quit", scale);
 }
 
 static void
