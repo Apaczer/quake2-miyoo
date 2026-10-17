@@ -5,10 +5,12 @@
 
 OUTPUTNAME = quake2
 
+DEFINES += -DLOW_RES
+
 ifeq ($(platform), )
   INSTALLDIR ?= ./
 
-  DEFINES = -DYQ2ARCH=\"x86_64\"
+  DEFINES += -DYQ2ARCH=\"x86_64\"
 
   DEBUG_CFLAGS += -g3
   OPT_CFLAGS += -O0
@@ -19,7 +21,7 @@ else ifeq ($(platform), miyoo)
   CHAINPREFIX  ?= /opt/miyoo
   CROSS_COMPILE ?= $(CHAINPREFIX)/usr/bin/arm-linux-
 
-  DEFINES = -DYQ2ARCH=\"arm\" -DMIYOO
+  DEFINES += -DYQ2ARCH=\"arm\" -DMIYOO -DNO_GL
   MUSIC = wav
 
   DEBUG_CFLAGS += -g0
