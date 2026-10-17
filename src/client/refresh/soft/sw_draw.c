@@ -259,7 +259,7 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 		(y + pic->height > vid.height))
 	{
 		//R_Printf(PRINT_ALL, "Draw_Pic: bad coordinates\n");
-		return;
+		/* return; */
 	}
 
 	height = pic->height;
