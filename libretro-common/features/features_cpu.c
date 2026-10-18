@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define CLOCK_MONOTONIC 0
+
 #if defined(_WIN32)
 #include <direct.h>
 #else
@@ -107,10 +109,6 @@
 /* iOS/OSX specific. Lacks clock_gettime(), so implement it. */
 #ifdef __MACH__
 #include <sys/time.h>
-
-#ifndef CLOCK_MONOTONIC
-#define CLOCK_MONOTONIC 0
-#endif
 
 #ifndef CLOCK_REALTIME
 #define CLOCK_REALTIME 0
