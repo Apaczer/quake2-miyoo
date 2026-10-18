@@ -217,6 +217,12 @@ libretro-build-vita:
     - .libretro-vita-static-retroarch-master
     - .core-defs
 
+# Miyoo
+libretro-build-miyoo-arm32:
+  extends:
+    - .libretro-miyoo-arm32-make-default
+    - .core-defs
+
 # OpenDingux
 libretro-build-dingux-mips32:
   extends:
