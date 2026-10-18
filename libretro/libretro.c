@@ -1446,6 +1446,9 @@ static int invert_y_axis = 1;
  *   with images and aliases spinning out of
  *   control...) */
 static const unsigned supported_framerates[] = {
+#ifdef LOWFPS
+   15,
+#endif
    30,
    50,
    60,
@@ -1524,6 +1527,11 @@ static void update_variables(bool startup)
 
       switch (framerate)
       {
+#ifdef LOWFPS
+         case 15:
+            framerate_ms = 67;
+            break;
+#endif
          case 30:
             framerate_ms = 33;
             break;

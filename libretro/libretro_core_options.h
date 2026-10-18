@@ -67,6 +67,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       NULL,
       NULL,
       {
+#ifdef LOWRES
+         { "160x120",    NULL },
+#endif
          { "320x240",    NULL },
          { "400x240",    NULL },
          { "480x272",    NULL },
@@ -118,6 +121,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       NULL,
       {
          { "auto", "Auto" },
+#ifdef LOWFPS
+         { "15",   "15 fps" },
+#endif
          { "30",   "30 fps" },
          { "50",   "50 fps" },
          { "60",   "60 fps" },

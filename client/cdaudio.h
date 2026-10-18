@@ -23,7 +23,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdint.h>
 
+#ifdef LOWFPS
+#define AUDIO_SAMPLE_RATE 11025
+#else
 #define AUDIO_SAMPLE_RATE 44100
+#endif
 /* Audio buffer must be sufficient for operation
  * at 30 fps
  * > (2 * 44100) / 30 = 2490 total samples
