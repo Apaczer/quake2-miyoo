@@ -415,7 +415,7 @@ VID_MenuInit(void)
 	s_mode_list.generic.type = MTYPE_SPINCONTROL;
 	s_mode_list.generic.name = "video mode";
 	s_mode_list.generic.x = 0;
-	s_mode_list.generic.y = (y += 10);
+	s_mode_list.generic.y = (y += 7);
 	s_mode_list.itemnames = resolutions;
 
 	if (r_mode->value >= 0)
@@ -430,7 +430,7 @@ VID_MenuInit(void)
 	s_brightness_slider.generic.type = MTYPE_SLIDER;
 	s_brightness_slider.generic.name = "brightness";
 	s_brightness_slider.generic.x = 0;
-	s_brightness_slider.generic.y = (y += 20);
+	s_brightness_slider.generic.y = (y += 14);
 	s_brightness_slider.generic.callback = BrightnessCallback;
 	s_brightness_slider.minvalue = 1;
 	s_brightness_slider.maxvalue = 20;
@@ -438,7 +438,7 @@ VID_MenuInit(void)
 
 	s_fov_slider.generic.type = MTYPE_SLIDER;
 	s_fov_slider.generic.x = 0;
-	s_fov_slider.generic.y = (y += 10);
+	s_fov_slider.generic.y = (y += 7);
 	s_fov_slider.generic.name = "field of view";
 	s_fov_slider.generic.callback = FOVCallback;
 	s_fov_slider.minvalue = 60;
@@ -448,7 +448,7 @@ VID_MenuInit(void)
 	s_uiscale_list.generic.type = MTYPE_SPINCONTROL;
 	s_uiscale_list.generic.name = "ui scale";
 	s_uiscale_list.generic.x = 0;
-	s_uiscale_list.generic.y = (y += 10);
+	s_uiscale_list.generic.y = (y += 7);
 	s_uiscale_list.itemnames = uiscale_names;
 	if (r_hudscale->value != r_consolescale->value ||
 		r_hudscale->value != r_menuscale->value ||
@@ -474,21 +474,21 @@ VID_MenuInit(void)
 	s_fs_box.generic.type = MTYPE_SPINCONTROL;
 	s_fs_box.generic.name = "fullscreen";
 	s_fs_box.generic.x = 0;
-	s_fs_box.generic.y = (y += 10);
+	s_fs_box.generic.y = (y += 7);
 	s_fs_box.itemnames = fullscreen_names;
 	s_fs_box.curvalue = (int)vid_fullscreen->value;
 
 	s_vsync_list.generic.type = MTYPE_SPINCONTROL;
 	s_vsync_list.generic.name = "vertical sync";
 	s_vsync_list.generic.x = 0;
-	s_vsync_list.generic.y = (y += 10);
+	s_vsync_list.generic.y = (y += 7);
 	s_vsync_list.itemnames = yesno_names;
 	s_vsync_list.curvalue = (r_vsync->value != 0);
 
 	s_af_list.generic.type = MTYPE_SPINCONTROL;
 	s_af_list.generic.name = "aniso filtering";
 	s_af_list.generic.x = 0;
-	s_af_list.generic.y = (y += 10);
+	s_af_list.generic.y = (y += 7);
 	s_af_list.generic.callback = AnisotropicCallback;
 	s_af_list.itemnames = pow2_names;
 	s_af_list.curvalue = 0;
@@ -505,7 +505,7 @@ VID_MenuInit(void)
 	s_msaa_list.generic.type = MTYPE_SPINCONTROL;
 	s_msaa_list.generic.name = "multisampling";
 	s_msaa_list.generic.x = 0;
-	s_msaa_list.generic.y = (y += 10);
+	s_msaa_list.generic.y = (y += 7);
 	s_msaa_list.itemnames = pow2_names;
 	s_msaa_list.curvalue = 0;
 	if (gl_msaa_samples->value)
@@ -521,13 +521,13 @@ VID_MenuInit(void)
 	s_defaults_action.generic.type = MTYPE_ACTION;
 	s_defaults_action.generic.name = "reset to default";
 	s_defaults_action.generic.x = 0;
-	s_defaults_action.generic.y = (y += 20);
+	s_defaults_action.generic.y = (y += 14);
 	s_defaults_action.generic.callback = ResetDefaults;
 
 	s_apply_action.generic.type = MTYPE_ACTION;
 	s_apply_action.generic.name = "apply";
 	s_apply_action.generic.x = 0;
-	s_apply_action.generic.y = (y += 10);
+	s_apply_action.generic.y = (y += 7);
 	s_apply_action.generic.callback = ApplyChanges;
 
 	Menu_AddItem(&s_opengl_menu, (void *)&s_renderer_list);
