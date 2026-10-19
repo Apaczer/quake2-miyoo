@@ -38,12 +38,12 @@ CL_ParseInventory(void)
 }
 
 static void
-Inv_DrawStringScaled(int x, int y, char *string, float factor)
+Inv_DrawStringScaled(uint x, uint y, char *string, float factor)
 {
 	while (*string)
 	{
-		Draw_CharScaled(x, y, *string, factor);
-		x += factor*8;
+		Draw_CharScaled(x - 15, y, *string, factor);
+		x += factor*6;
 		string++;
 	}
 }
@@ -106,21 +106,21 @@ CL_DrawInventory(void)
 		top = 0;
 	}
 
-	x = (viddef.width - scale*256) / 2;
-	y = (viddef.height - scale*240) / 2;
+	x = (viddef.width - scale*128) / 2;
+	y = (viddef.height - scale*120) / 2;
 
 	/* repaint everything next frame */
 	SCR_DirtyScreen();
 
-	Draw_PicScaled(x, y + scale*8, "inventory", scale);
+	Draw_PicScaled(x, y + scale*4, "inventory", scale);
 
 	y += scale*24;
 	x += scale*24;
 
 	Inv_DrawStringScaled(x, y, "hotkey ### item", scale);
-	Inv_DrawStringScaled(x, y + scale*8, "------ --- ----", scale);
+	Inv_DrawStringScaled(x, y + scale*4, "------ --- ----", scale);
 
-	y += scale*16;
+	y += scale*10;
 
 	for (i = top; i < num && i < top + DISPLAY_ITEMS; i++)
 	{
@@ -151,13 +151,13 @@ CL_DrawInventory(void)
 			/* draw a blinky cursor by the selected item */
 			if ((int)(cls.realtime * 10) & 1)
 			{
-				Draw_CharScaled(x - scale*8, y, 15, scale);
+				Draw_CharScaled(x - scale*4, y, 15, scale);
 			}
 		}
 
 		Inv_DrawStringScaled(x, y, string, scale);
 
-		y += scale*8;
+		y += scale*4;
 	}
 }
 
