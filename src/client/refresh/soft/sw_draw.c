@@ -80,10 +80,17 @@ void RE_Draw_CharScaled(int x, int y, int num, float scale)
 {
 	pixel_t	*dest;
 	byte	*source;
-	int		drawline;
-	int		row, col, u, xpos, ypos, iscale;
+	int		row, col, u, v, xpos, ypos, iscale;
+	int		drawheight, fx, fy, fxstep, fystep;
+	byte	*srcline;
+
+	/* output char size: 8 source pixels -> 5 output pixels (~1.5x smaller) */
+	#define CHAR_OUT_SIZE  6
+	#define CHAR_SRC_SIZE  8
 
 	iscale = (int) scale;
+	if (iscale < 1)
+		return;
 
 	num &= 255;
 
@@ -100,32 +107,46 @@ void RE_Draw_CharScaled(int x, int y, int num, float scale)
 	col = num&15;
 	source = draw_chars->pixels[0] + (row<<10) + (col<<3);
 
+	/* fixed-point 16.16 step to map CHAR_OUT_SIZE -> CHAR_SRC_SIZE */
+	fystep = (CHAR_SRC_SIZE << 16) / CHAR_OUT_SIZE;
+	fxstep = fystep;
+
+	drawheight = CHAR_OUT_SIZE;
+	fy = 0;
+
 	if (y < 0)
 	{	// clipped
-		drawline = 8 + y;
-		source -= 128*y;
+		int skip = -y;
+		drawheight -= skip;
+		if (drawheight <= 0)
+			return;
+		fy = skip * fystep;
 		y = 0;
 	}
-	else
-		drawline = 8;
 
 	dest = vid_buffer + y * vid.width + x;
 
-	while (drawline--)
+	for (v = 0; v < drawheight; v++)
 	{
-		for (ypos=0; ypos < iscale; ypos ++)
+		srcline = source + (fy >> 16) * 128;
+		for (ypos = 0; ypos < iscale; ypos++)
 		{
-			for(u=0; u < 8; u++)
+			fx = 0;
+			for (u = 0; u < CHAR_OUT_SIZE; u++)
 			{
-				if (source[u] != TRANSPARENT_COLOR)
-					for (xpos=0; xpos < iscale; xpos ++)
+				int srcx = fx >> 16;
+				if (srcline[srcx] != TRANSPARENT_COLOR)
+				{
+					for (xpos = 0; xpos < iscale; xpos++)
 					{
-						dest[u * iscale + xpos] = source[u];
+						dest[u * iscale + xpos] = srcline[srcx];
 					}
+				}
+				fx += fxstep;
 			}
 			dest += vid.width;
 		}
-		source += 128;
+		fy += fystep;
 	}
 }
 
