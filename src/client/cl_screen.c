@@ -1225,7 +1225,7 @@ SCR_ExecuteLayoutString(char *s)
 			token = COM_Parse(&s);
 			SCR_AddDirtyPoint(x, y);
 			SCR_AddDirtyPoint(x + scale*23, y + scale*23);
-			Draw_PicScaled(x, y, (char *)token, scale);
+			Draw_PicScaled(x + 65, y + 60, (char *)token, scale);
 			continue;
 		}
 
