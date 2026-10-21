@@ -204,9 +204,13 @@ ApplyChanges(void *unused)
 	{
 		Cvar_SetValue("r_hudscale", -1);
 	}
+	else if (s_uiscale_list.curvalue == 1)
+	{
+		Cvar_SetValue("r_hudscale", 0.5f);
+	}
 	else if (s_uiscale_list.curvalue < GetCustomValue(&s_uiscale_list))
 	{
-		Cvar_SetValue("r_hudscale", s_uiscale_list.curvalue);
+		Cvar_SetValue("r_hudscale", (s_uiscale_list.curvalue - 1));
 	}
 
 	if (s_uiscale_list.curvalue != GetCustomValue(&s_uiscale_list))
@@ -311,6 +315,7 @@ VID_MenuInit(void)
 
 	static const char *uiscale_names[] = {
 		"auto",
+		"0.5x",
 		"1x",
 		"2x",
 		"3x",
@@ -462,9 +467,12 @@ VID_MenuInit(void)
 	}
 	else if (r_hudscale->value > 0 &&
 			r_hudscale->value < GetCustomValue(&s_uiscale_list) &&
-			r_hudscale->value == (int)r_hudscale->value)
+			(r_hudscale->value == 0.5f || r_hudscale->value == (int)r_hudscale->value))
 	{
-		s_uiscale_list.curvalue = r_hudscale->value;
+		if (r_hudscale->value == 0.5f) {
+			s_uiscale_list.curvalue = 1;
+		} else
+			s_uiscale_list.curvalue = r_hudscale->value + 1;
 	}
 	else
 	{

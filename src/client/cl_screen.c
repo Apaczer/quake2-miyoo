@@ -1661,7 +1661,10 @@ SCR_ClampScale(float scale)
 		scale = f;
 	}
 
-	if (scale < 1)
+	if (scale <= 0.5f)
+	{
+		scale = 0.5f;
+	} else if (scale < 1)
 	{
 		scale = 1;
 	}
@@ -1684,6 +1687,10 @@ SCR_GetDefaultScale(void)
 		i = 1;
 	}
 
+#ifdef LOW_RES
+	if (viddef.width == 160)
+		return 0.5f;
+#endif
 	return i;
 }
 

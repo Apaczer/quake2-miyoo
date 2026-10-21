@@ -83,12 +83,70 @@ void RE_Draw_CharScaled(int x, int y, int num, float scale)
 	int		drawline;
 	int		row, col, u, xpos, ypos, iscale;
 
-	iscale = (int) scale;
-
 	num &= 255;
 
 	if (num == 32 || num == 32+128)
 		return;
+
+	if (scale <= 0.5f)
+	{
+		int v;
+
+		if (y <= -4 || (y + 4) > vid.height)
+			return;
+
+		if (x <= -4 || x >= vid.width)
+			return;
+
+		row = num >> 4;
+		col = num & 15;
+		source = draw_chars->pixels[0] + (row << 10) + (col << 3);
+
+		if (y < 0)
+		{
+			drawline = 4 + y;
+			if (drawline <= 0)
+				return;
+			source += 128 * (-y * 2);
+			y = 0;
+		}
+		else
+		{
+			drawline = 4;
+		}
+
+		dest = vid_buffer + y * vid.width + x;
+
+		for (v = 0; v < drawline; v++)
+		{
+			byte *row0 = source;
+			byte *row1 = source + 128;
+
+			for (u = 0; u < 4; u++)
+			{
+				int px = x + u;
+				if (px >= 0 && px < vid.width)
+				{
+					byte c = row0[u * 2];
+					if (c == TRANSPARENT_COLOR) c = row0[u * 2 + 1];
+					if (c == TRANSPARENT_COLOR) c = row1[u * 2];
+					if (c == TRANSPARENT_COLOR) c = row1[u * 2 + 1];
+
+					if (c != TRANSPARENT_COLOR)
+					{
+						dest[u] = c;
+					}
+				}
+			}
+			dest += vid.width;
+			source += 128 * 2;
+		}
+		return;
+	}
+
+	iscale = (int) scale;
+	if (iscale < 1)
+		iscale = 1;
 
 	if (y <= -8)
 		return;	// totally off screen
@@ -246,13 +304,97 @@ void RE_Draw_PicScaled(int x, int y, char *name, float scale)
 	int			v, u, xpos, ypos, iscale;
 	int			height;
 
-	iscale = (int)scale;
 	pic = RE_Draw_FindPic (name);
 	if (!pic)
 	{
 		R_Printf(PRINT_ALL, "Can't find pic: %s\n", name);
 		return;
 	}
+
+	if (scale <= 0.5f)
+	{
+		int width = pic->width >> 1;
+		int pheight = pic->height >> 1;
+		int skip_x = 0;
+		int skip_y = 0;
+
+		if (width <= 0 || pheight <= 0)
+			return;
+
+		if (x + width <= 0 || x >= vid.width || y + pheight <= 0 || y >= vid.height)
+			return;
+
+		if (y < 0)
+		{
+			skip_y = -y;
+			pheight -= skip_y;
+			y = 0;
+		}
+		if (y + pheight > vid.height)
+		{
+			pheight = vid.height - y;
+		}
+
+		if (x < 0)
+		{
+			skip_x = -x;
+			width -= skip_x;
+			x = 0;
+		}
+		if (x + width > vid.width)
+		{
+			width = vid.width - x;
+		}
+
+		if (width <= 0 || pheight <= 0)
+			return;
+
+		source = pic->pixels[0] + (skip_y * 2) * pic->width + (skip_x * 2);
+		dest = vid_buffer + y * vid.width + x;
+
+		if (!pic->transparent)
+		{
+			for (v = 0; v < pheight; v++)
+			{
+				for (u = 0; u < width; u++)
+				{
+					dest[u] = source[u * 2];
+				}
+				dest += vid.width;
+				source += pic->width * 2;
+			}
+		}
+		else
+		{
+			for (v = 0; v < pheight; v++)
+			{
+				for (u = 0; u < width; u++)
+				{
+					byte c = source[u * 2];
+					if (c == TRANSPARENT_COLOR)
+					{
+						if (source[u * 2 + 1] != TRANSPARENT_COLOR)
+							c = source[u * 2 + 1];
+						else if (source[pic->width + u * 2] != TRANSPARENT_COLOR)
+							c = source[pic->width + u * 2];
+						else if (source[pic->width + u * 2 + 1] != TRANSPARENT_COLOR)
+							c = source[pic->width + u * 2 + 1];
+					}
+					if (c != TRANSPARENT_COLOR)
+					{
+						dest[u] = c;
+					}
+				}
+				dest += vid.width;
+				source += pic->width * 2;
+			}
+		}
+		return;
+	}
+
+	iscale = (int)scale;
+	if (iscale < 1)
+		iscale = 1;
 
 	if ((x < 0) ||
 		(x + pic->width > vid.width) ||
