@@ -32,6 +32,10 @@ float SCR_GetMenuScale(void)
 {
 	float aspect_correction;
 
+#ifdef LOWRES
+	if (is_soft_render && (scr_height == 120))
+		return 0.5f;
+#endif
 	/* When using the hardware renderer,
 	 * start increasing the scale once screen
 	 * height exceeds 240 (i.e. assume baseline
