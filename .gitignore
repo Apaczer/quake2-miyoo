@@ -55,3 +55,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Game asset dir
+baseq2/
