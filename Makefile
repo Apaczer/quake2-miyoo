@@ -303,7 +303,7 @@ else ifeq ($(basegame),zaero)
 CFLAGS   += -DZAERO
 endif
 
-ifneq (,$(findstring unix,$(platform)))
+ifneq (,$(findstring unix,$(system_platform)))
 CFLAGS += -std=gnu99
 else
 CFLAGS += -std=c99
