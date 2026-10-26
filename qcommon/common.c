@@ -1530,6 +1530,9 @@ void Qcommon_Init (int argc, char **argv)
 		SCR_EndLoadingPlaque ();
 	}
 
+	// overwrite any setting with custom config
+	Cbuf_AddText ("exec custom.cfg\n");
+	Cbuf_Execute ();
 	Com_Printf ("====== Quake2 Initialized ======\n\n");	
 }
 

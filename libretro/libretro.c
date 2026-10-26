@@ -138,6 +138,7 @@ api_entry funcs[GL_FUNCS_NUM];
 char g_rom_dir[1024] = {0};
 char g_save_dir[1024] = {0};
 char g_music_dir[1024] = {0};
+char g_system_dir[1024] = {0};
 
 #ifdef HAVE_OPENGL
 extern struct retro_hw_render_callback hw_render;
@@ -2076,6 +2077,7 @@ bool retro_load_game(const struct retro_game_info *info)
 	char parent_dir[1024];
 	bool use_external_savedir = false;
 	const char *base_save_dir = NULL;
+	const char *base_config_dir = NULL;
 	enum retro_pixel_format fmt = RETRO_PIXEL_FORMAT_XRGB8888;
 
 #if defined(ROGUE)
@@ -2165,6 +2167,19 @@ bool retro_load_game(const struct retro_game_info *info)
 		}
 	}
 
+	/* Get default config directory from retro system dir */
+   if (environ_cb(RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY, &base_config_dir) && base_config_dir)
+   {
+		if (!string_is_empty(base_config_dir))
+		{
+         /* > Build final config path with core's name subdir */
+         fill_pathname_join(g_system_dir, base_config_dir, "vitaquake2", sizeof(g_system_dir));
+
+			/* > Create config directory, if required */
+			if (!path_is_directory(g_system_dir))
+				path_mkdir(g_system_dir);
+      }
+   }
 	/* > Final check: is the save directory the same as the 'rom' directory?
 	 *   (i.e. ensure logical behaviour if user has set a bizarre save path...) */
 	use_external_savedir = use_external_savedir && (strcmp(g_save_dir, g_rom_dir) != 0);
