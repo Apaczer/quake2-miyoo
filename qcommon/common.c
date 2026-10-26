@@ -1461,6 +1461,8 @@ void Qcommon_Init (int argc, char **argv)
 
 	FS_InitFilesystem ();
 
+	// load basic configuration from pak0.pak for valid operation
+	// should not be overwriten by another cfg with similar name
 	Cbuf_AddText ("exec default.cfg\n");
 
 	//Sys_DefaultConfig();
