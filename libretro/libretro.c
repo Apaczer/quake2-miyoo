@@ -1909,10 +1909,15 @@ static void update_variables(bool startup)
 				Cvar_SetValue( "hand", 0 );
 			else if (strcmp(var.value, "left") == 0)
 				Cvar_SetValue( "hand", 1 );
+#ifdef HAVE_OPENGL
 			else if (strcmp(var.value, "center") == 0)
 				Cvar_SetValue( "hand", 2 );
 			else
 				Cvar_SetValue( "hand", 3 );
+#else
+			else
+				Cvar_SetValue( "hand", 2 );
+#endif
 		}
 
 		var.key = "vitaquakeii_cin_force43";

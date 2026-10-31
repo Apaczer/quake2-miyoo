@@ -388,7 +388,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       {
          { "right",  "Right" },
          { "left",   "Left" },
+#ifdef HAVE_OPENGL
          { "center", "Center" },
+#endif
          { "hidden", "Hidden" },
          { NULL, NULL },
       },
