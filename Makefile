@@ -4,6 +4,7 @@ HAVE_OPENGL    := 0
 HAVE_CDAUDIO   := 1
 HAVE_OGG       := 1
 HAVE_WAV       := 0
+NO_ANALOG_JOY  := 0
 
 ifneq ($(V),1)
    Q := @
@@ -241,6 +242,7 @@ else ifeq ($(platform), miyoo)
    SHARED := -shared -Wl,--version-script=$(CORE_DIR)/link.T -Wl,--no-undefined
    CFLAGS += -DMIYOO -DHAVE_NEAREST_RESAMPLER -fomit-frame-pointer -ffast-math -mcpu=arm926ej-s
    CFLAGS += -DLOWRES -DLOWFPS
+   NO_ANALOG_JOY = 1
    HAVE_OPENGL = 0
    HAVE_OGG = 0
    HAVE_WAV = 1
@@ -293,6 +295,10 @@ CFLAGS   += -DHAVE_STB_VORBIS
 else ifeq ($(HAVE_WAV),1)
 CFLAGS   += -DHAVE_RWAV
 endif
+endif
+
+ifeq ($(NO_ANALOG_JOY),1)
+CFLAGS   += -DNO_ANALOG_JOY
 endif
 
 ifeq ($(basegame),xatrix)
