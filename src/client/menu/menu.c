@@ -1139,52 +1139,16 @@ ControlsSetMenuItemValues(void)
 #ifdef OGG
     s_options_oggvolume_slider.curvalue = Cvar_VariableValue("ogg_volume") * 10;
     s_options_enableogg_box.curvalue = (Cvar_VariableValue("ogg_enable") != 0);
-
-    cvar_t *ogg;
-    ogg = Cvar_Get("ogg_sequence", "loop", CVAR_ARCHIVE);
-
-    if (!strcmp(ogg->string, "random"))
-    {
-        s_options_cdshuffle_box.curvalue = 1;
-    }
-    else
-    {
-        s_options_cdshuffle_box.curvalue = 0;
-    }
 #endif
 
 #ifdef MP3
     s_options_mp3volume_slider.curvalue = Cvar_VariableValue("mp3_volume") * 10;
     s_options_enablemp3_box.curvalue = (Cvar_VariableValue("mp3_enable") != 0);
-
-    cvar_t *mp3;
-    mp3 = Cvar_Get("mp3_sequence", "loop", CVAR_ARCHIVE);
-
-    if (!strcmp(mp3->string, "random"))
-    {
-        s_options_cdshuffle_box.curvalue = 1;
-    }
-    else
-    {
-        s_options_cdshuffle_box.curvalue = 0;
-    }
 #endif
 
 #ifdef WAV_MUSIC
     s_options_wavvolume_slider.curvalue = Cvar_VariableValue("wav_volume") * 10;
     s_options_enablewav_box.curvalue = (Cvar_VariableValue("wav_enable") != 0);
-
-    cvar_t *wav;
-    wav = Cvar_Get("wav_sequence", "loop", CVAR_ARCHIVE);
-
-    if (!strcmp(wav->string, "random"))
-    {
-        s_options_cdshuffle_box.curvalue = 1;
-    }
-    else
-    {
-        s_options_cdshuffle_box.curvalue = 0;
-    }
 #endif
 
     s_options_quality_list.curvalue = (s_khz->value == 11 || s_khz->value == 22 ? 0 : 1);
