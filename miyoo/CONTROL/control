@@ -1,0 +1,10 @@
+Package: quake2
+Version: m3
+Depends: sdl
+Source: https://github.com/Apaczer/quake2-miyoo
+License: Custom
+Description: Yamagi Quake II client
+Section: games
+Priority: optional
+Maintainer: Apaczer
+Architecture: arm

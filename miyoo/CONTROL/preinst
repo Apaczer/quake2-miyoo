@@ -1,0 +1,2 @@
+#!/bin/sh
+sync; echo 'Installing new quake2..'; rm /var/lib/opkg/info/quake2.list; exit 0
