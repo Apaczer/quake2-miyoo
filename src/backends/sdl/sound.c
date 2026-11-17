@@ -1340,7 +1340,7 @@ SDL_BackendInit(void)
 	}
 
 	int sndbits = (Cvar_Get("sndbits", "16", CVAR_ARCHIVE))->value;
-	int sndfreq = (Cvar_Get("s_khz", "48", CVAR_ARCHIVE))->value;
+	int sndfreq = (Cvar_Get("s_khz", "22", CVAR_ARCHIVE))->value;
 	int sndchans = (Cvar_Get("sndchannels", "2", CVAR_ARCHIVE))->value;
 
 	Com_Printf("Starting SDL audio callback.\n");
